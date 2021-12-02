@@ -8,7 +8,7 @@ solutions in idiomatic [Kotlin][kotlin], with the preference for high-level, dec
 | Day | Part 1   | Part 2   | Solution                                   |
 | --- | :------: | :------: | ------------------------------------------ |
 | 1   | ✓        | ✓        | [Day01.kt](src/main/kotlin/day01/Day01.kt) |
-| 2   |          |          |                                            |
+| 2   | ✓        | ✓        | [Day02.kt](src/main/kotlin/day02/Day02.kt) |
 | 3   |          |          |                                            |
 | 4   |          |          |                                            |
 | 5   |          |          |                                            |
