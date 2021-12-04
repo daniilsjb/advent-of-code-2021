@@ -1,7 +1,6 @@
 # Advent of Code 2021
 
-This repository contains my solutions for [Advent of Code][aoc] in 2021. This year I decided to attempt writing my
-solutions in idiomatic [Kotlin][kotlin], with the preference for high-level, declarative programming style.
+This repository contains my solutions for [Advent of Code](https://adventofcode.com/2021) in 2021 🎄
 
 ## Summary
 
@@ -32,7 +31,3 @@ solutions in idiomatic [Kotlin][kotlin], with the preference for high-level, dec
 | 23  |          |          |                                            |
 | 24  |          |          |                                            |
 | 25  |          |          |                                            |
-
-
-[aoc]: https://adventofcode.com/2021
-[kotlin]: https://kotlinlang.org/
