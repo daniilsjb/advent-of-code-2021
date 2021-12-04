@@ -29,8 +29,6 @@ fun part1(numbers: List<Int>) =
         .sum()
 
 fun part2(numbers: List<Int>) =
-    numbers
-        .zip(numbers.drop(1), Int::plus)
-        .zip(numbers.drop(2), Int::plus)
+    numbers.windowed(size = 3, transform = List<Int>::sum)
         .zipWithNext { previous, next -> if (next > previous) 1 else 0 }
         .sum()
