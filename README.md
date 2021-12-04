@@ -9,7 +9,7 @@ This repository contains my solutions for [Advent of Code](https://adventofcode.
 | 1   | ✓        | ✓        | [Day01.kt](src/main/kotlin/day01/Day01.kt) |
 | 2   | ✓        | ✓        | [Day02.kt](src/main/kotlin/day02/Day02.kt) |
 | 3   | ✓        | ✓        | [Day03.kt](src/main/kotlin/day03/Day03.kt) |
-| 4   |          |          |                                            |
+| 4   | ✓        | ✓        | [Day04.kt](src/main/kotlin/day04/Day04.kt) |
 | 5   |          |          |                                            |
 | 6   |          |          |                                            |
 | 7   |          |          |                                            |
