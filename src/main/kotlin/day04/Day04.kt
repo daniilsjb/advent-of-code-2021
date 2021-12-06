@@ -3,18 +3,7 @@ package day04
 import java.io.File
 
 fun main() {
-    val entries = File("src/main/kotlin/day04/Day04.txt")
-        .readText()
-        .trim()
-        .split("""\s+""".toRegex())
-
-    val numbers = entries.first()
-        .split(",")
-        .map(String::toInt)
-
-    val boards = entries.subList(1, entries.size)
-        .map(String::toInt)
-        .chunked(25)
+    val (numbers, boards) = parse("src/main/kotlin/day04/Day04.txt")
 
     val answer1 = part1(numbers, boards.map(List<Int>::toMutableList))
     val answer2 = part2(numbers, boards.map(List<Int>::toMutableList))
@@ -30,6 +19,23 @@ fun main() {
 
     println("[Part 2]")
     println("Answer: $answer2")
+}
+
+fun parse(path: String): Pair<List<Int>, List<List<Int>>> {
+    val entries = File(path)
+        .readText()
+        .trim()
+        .split("""\s+""".toRegex())
+
+    val numbers = entries.first()
+        .split(",")
+        .map(String::toInt)
+
+    val boards = entries.subList(1, entries.size)
+        .map(String::toInt)
+        .chunked(25)
+
+    return Pair(numbers, boards)
 }
 
 // We need to keep track of each board's state as the game progresses.
@@ -80,7 +86,7 @@ fun Board.hasWon(col: Int, row: Int) =
 // we mark each number, in turn, on each board, until we encounter a winning
 // position, in which case the result is directly returned.
 
-fun part1(numbers: List<Int>, boards: List<Board>): Int =
+fun part1(numbers: List<Int>, boards: List<Board>) =
     numbers.firstNotNullOf { number ->
         boards.firstNotNullOfOrNull { board ->
             board.findPosition(number)?.let { (col, row, idx) ->

@@ -3,9 +3,7 @@ package day01
 import java.io.File
 
 fun main() {
-    val data = File("src/main/kotlin/day01/Day01.txt")
-        .readLines()
-        .map(String::toInt)
+    val data = parse("src/main/kotlin/day01/Day01.txt")
 
     val answer1 = part1(data)
     val answer2 = part2(data)
@@ -22,6 +20,11 @@ fun main() {
     println("[Part 2]")
     println("Answer: $answer2")
 }
+
+fun parse(path: String): List<Int> =
+    File(path)
+        .readLines()
+        .map(String::toInt)
 
 fun part1(numbers: List<Int>) =
     numbers

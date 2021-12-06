@@ -3,8 +3,7 @@ package day03
 import java.io.File
 
 fun main() {
-    val data = File("src/main/kotlin/day03/Day03.txt")
-        .readLines()
+    val data = parse("src/main/kotlin/day03/Day03.txt")
 
     val answer1 = part1(data)
     val answer2 = part2(data)
@@ -21,6 +20,9 @@ fun main() {
     println("[Part 2]")
     println("Answer: $answer2")
 }
+
+fun parse(path: String): List<String> =
+    File(path).readLines()
 
 fun part1(lines: List<String>): Int {
     val bitCount = lines[0].length

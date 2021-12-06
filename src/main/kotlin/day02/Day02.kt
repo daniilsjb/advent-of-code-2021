@@ -3,9 +3,7 @@ package day02
 import java.io.File
 
 fun main() {
-    val data = File("src/main/kotlin/day02/Day02.txt")
-        .readLines()
-        .map(String::toCommand)
+    val data = parse("src/main/kotlin/day02/Day02.txt")
 
     val answer1 = part1(data)
     val answer2 = part2(data)
@@ -31,6 +29,11 @@ data class Command(
     val action: Action,
     val number: Int,
 )
+
+fun parse(path: String): List<Command> =
+    File(path)
+        .readLines()
+        .map(String::toCommand)
 
 fun String.toCommand(): Command {
     val (actionPart, numberPart) = this.split(" ")
