@@ -29,17 +29,13 @@ fun parse(path: String): List<Int> =
         .map(String::toInt)
 
 fun simulate(pool: List<Int>, iterations: Int): Long {
-    val queue = ArrayDeque(listOf<Long>(0, 0, 0, 0, 0, 0, 0, 0, 0))
-    for (item in pool) {
-        ++queue[item]
+    val queue = Array(9) { 0L }
+    for (fish in pool) {
+        ++queue[fish]
     }
-
     for (day in 0 until iterations) {
-        val breeders = queue.removeFirst()
-        queue.addLast(breeders)
-        queue[queue.lastIndex - 2] += breeders
+        queue[(day + 7) % queue.size] += queue[day % queue.size]
     }
-
     return queue.sum()
 }
 
