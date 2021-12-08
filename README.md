@@ -13,7 +13,7 @@ This repository contains my solutions for [Advent of Code](https://adventofcode.
 | 5   | ✓        | ✓        | [Day05.kt](src/main/kotlin/day05/Day05.kt) |
 | 6   | ✓        | ✓        | [Day06.kt](src/main/kotlin/day06/Day06.kt) |
 | 7   | ✓        | ✓        | [Day07.kt](src/main/kotlin/day07/Day07.kt) |
-| 8   |          |          |                                            |
+| 8   | ✓        | ✓        | [Day08.kt](src/main/kotlin/day08/Day08.kt) |
 | 9   |          |          |                                            |
 | 10  |          |          |                                            |
 | 11  |          |          |                                            |
