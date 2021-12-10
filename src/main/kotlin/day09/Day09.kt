@@ -3,10 +3,10 @@ package day09
 import java.io.File
 
 fun main() {
-    val (width, height, locations) = parse("src/main/kotlin/day09/Day09.txt")
+    val data = parse("src/main/kotlin/day09/Day09.txt")
 
-    val answer1 = part1(Heightmap(width, height, locations.map(::Location)))
-    val answer2 = part2(Heightmap(width, height, locations.map(::Location)))
+    val answer1 = part1(data.toHeightmap())
+    val answer2 = part2(data.toHeightmap())
 
     println("🎄 Day 09 🎄")
 
@@ -34,6 +34,11 @@ fun parse(path: String): Triple<Int, Int, List<Int>> {
     return Triple(width, height, locations)
 }
 
+fun Triple<Int, Int, List<Int>>.toHeightmap() =
+    let { (width, height, locations) ->
+        Heightmap(width, height, locations.map(::Location))
+    }
+
 data class Heightmap(
     val width: Int,
     val height: Int,
@@ -56,50 +61,65 @@ fun adjacentNodes(x: Int, y: Int, width: Int, height: Int) =
         if (y + 1 < height) x to y + 1 else null,
     )
 
-fun part1(heightmap: Heightmap) =
-    (0 until heightmap.height).sumOf { y ->
-        (0 until heightmap.width).sumOf { x ->
-            val (height, _) = heightmap[x, y]
-            adjacentNodes(x, y, heightmap.width, heightmap.height)
-                .all { (nx, ny) -> heightmap[nx, ny].height > height }
-                .let { lowest -> if (lowest) height + 1 else 0 }
+fun part1(heightmap: Heightmap): Int {
+    var sum = 0
+    val (width, height) = heightmap
+    for (y in 0 until height) {
+        for (x in 0 until width) {
+            val node = heightmap[x, y]
+            val isLowestPoint = adjacentNodes(x, y, width, height)
+                .all { (nx, ny) -> heightmap[nx, ny].height > node.height }
+
+            if (isLowestPoint) {
+                sum += node.height + 1
+            }
         }
     }
+    return sum
+}
 
-fun floodFill(heightmap: Heightmap, x: Int, y: Int): Int {
-    val nodesToVisit = ArrayDeque<Pair<Int, Int>>()
-        .apply { addLast(x to y) }
+fun Location.isInsideUnexploredBasin() =
+    !visited && height != 9
+
+fun Location.visit() {
+    visited = true
+}
+
+fun countNodesInBasin(heightmap: Heightmap, x: Int, y: Int): Int {
+    val nodesToVisit = ArrayDeque(listOf(x to y))
 
     var count = 0
     while (nodesToVisit.isNotEmpty()) {
         val (nx, ny) = nodesToVisit.removeLast()
 
         val node = heightmap[nx, ny]
-        if (node.visited || node.height == 9) {
-            continue
+        if (node.isInsideUnexploredBasin()) {
+            node.visit()
+            count += 1
+
+            adjacentNodes(nx, ny, heightmap.width, heightmap.height)
+                .forEach(nodesToVisit::addLast)
         }
-
-        node.visited = true
-        adjacentNodes(nx, ny, heightmap.width, heightmap.height)
-            .forEach(nodesToVisit::addLast)
-
-        count += 1
     }
+
     return count
 }
 
-fun part2(heightmap: Heightmap) =
-    (0 until heightmap.height).flatMap { y ->
-        (0 until heightmap.width).mapNotNull { x ->
-            heightmap[x, y].let { (height, visited) ->
-                if (visited || height == 9) {
-                    null
-                } else {
-                    floodFill(heightmap, x, y)
-                }
+fun part2(heightmap: Heightmap): Int {
+    val basins = mutableListOf<Int>()
+
+    val (width, height) = heightmap
+    for (y in 0 until height) {
+        for (x in 0 until width) {
+            val node = heightmap[x, y]
+            if (node.isInsideUnexploredBasin()) {
+                basins.add(countNodesInBasin(heightmap, x, y))
             }
         }
     }
-    .sortedDescending()
-    .take(3)
-    .fold(1, Int::times)
+
+    return basins
+        .sortedDescending()
+        .take(3)
+        .fold(1, Int::times)
+}
