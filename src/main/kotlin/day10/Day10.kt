@@ -31,8 +31,8 @@ fun part1(lines: List<String>): Long {
         for (char in line) {
             when (char) {
                 '(' -> stack.addLast(')')
-                '{' -> stack.addLast('}')
                 '[' -> stack.addLast(']')
+                '{' -> stack.addLast('}')
                 '<' -> stack.addLast('>')
                 else -> if (char != stack.removeLast()) {
                     when (char) {
@@ -58,8 +58,8 @@ fun part2(lines: List<String>): Long {
         for (char in line) {
             when (char) {
                 '(' -> stack.addFirst(')')
-                '{' -> stack.addFirst('}')
                 '[' -> stack.addFirst(']')
+                '{' -> stack.addFirst('}')
                 '<' -> stack.addFirst('>')
                 else -> if (char != stack.removeFirst()) {
                     continue@outer
