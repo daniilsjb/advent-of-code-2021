@@ -38,14 +38,6 @@ fun parse(path: String): Graph {
 
 // Depth-first count of all possible paths from a node to the end of the graph.
 // When bias is set to true, a single small cave is allowed to be visited twice.
-//
-// There are several inefficiencies about this solution:
-// - storing a unique copy of the history of visited nodes per recursive call is
-// expensive, and could be replaced with a simple mutable list/map;
-// - storing labels as strings and performing string comparison is slow, and could
-// be optimized by assigning unique numeric identifiers during parsing.
-//
-// Nonetheless, this solution is simple and runs fast enough for me :)
 fun countPaths(graph: Graph, current: Label, visited: List<Label> = listOf(current), bias: Boolean = false): Int =
     graph.getValue(current).sumOf { neighbour ->
         if (neighbour == "end") {
