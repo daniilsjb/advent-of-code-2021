@@ -44,7 +44,7 @@ data class Instructions(
 fun parse(path: String): Instructions {
     val (pointsPart, foldsPart) = File(path)
         .readText()
-        .split("\n\n")
+        .split("""(\n\n)|(\r\n\r\n)""".toRegex())
         .map(String::trim)
 
     val points = pointsPart
