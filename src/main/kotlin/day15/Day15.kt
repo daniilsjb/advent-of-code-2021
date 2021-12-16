@@ -71,7 +71,9 @@ fun Vertex.edges(target: Vertex): List<Vertex> =
         if (y + 1 <= target.y) Vertex(x, y + 1) else null,
     )
 
-fun Graph.findPath(source: Vertex, target: Vertex): Int {
+fun findPath(graph: Graph, target: Vertex): Int {
+    val source = Vertex(0, 0)
+
     val distances = mutableMapOf(source to 0)
     val frontier = PriorityQueue<Path>()
         .apply { add(Path(target = source, distance = 0)) }
@@ -84,7 +86,7 @@ fun Graph.findPath(source: Vertex, target: Vertex): Int {
 
         if (distance > distances.getValue(vertex)) continue
         for (edge in vertex.edges(target)) {
-            val distanceToEdge = distance + distanceAt(edge)
+            val distanceToEdge = distance + graph.distanceAt(edge)
             if (distanceToEdge < distances.getOrDefault(edge, Int.MAX_VALUE)) {
                 distances[edge] = distanceToEdge
                 frontier.add(Path(edge, distanceToEdge))
@@ -96,7 +98,7 @@ fun Graph.findPath(source: Vertex, target: Vertex): Int {
 }
 
 fun part1(graph: Graph): Int =
-    graph.findPath(Vertex(0, 0), Vertex(graph.size - 1, graph.size - 1))
+    findPath(graph, target = Vertex(graph.size - 1, graph.size - 1))
 
 fun part2(graph: Graph): Int =
-    graph.findPath(Vertex(0, 0), Vertex(graph.size * 5 - 1, graph.size * 5 - 1))
+    findPath(graph, target = Vertex(graph.size * 5 - 1, graph.size * 5 - 1))
