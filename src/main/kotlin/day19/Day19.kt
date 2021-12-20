@@ -125,7 +125,7 @@ data class Scanner(val beacons: Set<Point>) {
  *
  * Once a scanner is "translated" into the primary space, it also becomes part
  * of the pivot and is used when determining further translations. This process
- * continues until there no scanners are left untranslated.
+ * continues until no scanners are left untranslated.
  */
 
 data class TranslatedScanner(
@@ -138,8 +138,8 @@ tailrec fun translateAll(scanners: List<Scanner>, pivots: List<TranslatedScanner
         return pivots
     }
 
-    val newScanners = mutableListOf<Scanner>()
     val newPivots = pivots.toMutableList()
+    val newScanners = mutableListOf<Scanner>()
 
     for (scanner in scanners) {
         when (val translated = translate(scanner, pivots)) {
