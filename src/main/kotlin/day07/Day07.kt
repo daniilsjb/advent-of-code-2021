@@ -22,19 +22,19 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): List<Int> =
+private fun parse(path: String): List<Int> =
     File(path)
         .readText()
         .trim()
         .split(",")
         .map(String::toInt)
 
-fun part1(numbers: List<Int>) =
+private fun part1(numbers: List<Int>) =
     (0..numbers.maxOf { it })
         .map { focus -> numbers.sumOf { position -> abs(focus - position) } }
         .minOf { it }
 
-fun part2(numbers: List<Int>) =
+private fun part2(numbers: List<Int>) =
     (0..numbers.maxOf { it })
-        .map { focus -> numbers.sumOf { position -> abs(focus - position).let { n -> n * (n + 1) shr 1 } } }
+        .map { focus -> numbers.sumOf { position -> abs(focus - position).let { n -> n * (n + 1) / 2 } } }
         .minOf { it }

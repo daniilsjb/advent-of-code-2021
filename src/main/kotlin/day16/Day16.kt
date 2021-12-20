@@ -25,17 +25,17 @@ fun main() {
  * AST
  */
 
-data class Packet(
+private data class Packet(
     val header: Header,
     val payload: Payload,
 )
 
-data class Header(
+private data class Header(
     val version: Int,
     val type: Int,
 )
 
-sealed interface Payload {
+private sealed interface Payload {
     @JvmInline
     value class Literal(val value: Long) : Payload
 
@@ -47,48 +47,48 @@ sealed interface Payload {
  * Parsing
  */
 
-fun parse(path: String): Packet =
+private fun parse(path: String): Packet =
     File(path)
         .readText()
         .trim()
         .toPacket()
 
-fun String.toPacket(): Packet {
+private fun String.toPacket(): Packet {
     val message = map(Char::toBitPattern)
         .joinToString(separator = "")
 
     return ParserState(message).packet()
 }
 
-fun Char.toBitPattern(): String =
+private fun Char.toBitPattern(): String =
     digitToInt(16)
         .toString(2)
         .padStart(4, '0')
 
 /* Parsing Information */
 
-data class ParserState(
+private data class ParserState(
     val message: String,
     var current: Int = 0,
 )
 
 /* Parsing Primitives */
 
-fun ParserState.consume(n: Int): String =
+private fun ParserState.consume(n: Int): String =
     message.substring(current, current + n).also { current += n }
 
-fun ParserState.finished(): Boolean =
+private fun ParserState.finished(): Boolean =
     current >= message.length
 
-fun ParserState.readInt(n: Int): Int =
+private fun ParserState.readInt(n: Int): Int =
     consume(n).toInt(2)
 
-fun ParserState.readLong(n: Int): Long =
+private fun ParserState.readLong(n: Int): Long =
     consume(n).toLong(2)
 
 /* Syntax Rules */
 
-fun ParserState.packet(): Packet {
+private fun ParserState.packet(): Packet {
     val header = Header(readInt(3), readInt(3))
     val payload = if (header.type == 4) {
         literal()
@@ -98,7 +98,7 @@ fun ParserState.packet(): Packet {
     return Packet(header, payload)
 }
 
-fun ParserState.literal(): Payload {
+private fun ParserState.literal(): Payload {
     var result = 0L
 
     do {
@@ -109,7 +109,7 @@ fun ParserState.literal(): Payload {
     return Payload.Literal(result)
 }
 
-fun ParserState.operator(): Payload {
+private fun ParserState.operator(): Payload {
     val packets = mutableListOf<Packet>()
 
     when (consume(1)) {
@@ -135,7 +135,7 @@ fun ParserState.operator(): Payload {
  * Evaluation
  */
 
-fun sum(packet: Packet): Int {
+private fun sum(packet: Packet): Int {
     val (header, payload) = packet
     return when (payload) {
         is Payload.Literal -> header.version
@@ -145,7 +145,7 @@ fun sum(packet: Packet): Int {
     }
 }
 
-fun eval(packet: Packet): Long {
+private fun eval(packet: Packet): Long {
     val (header, payload) = packet
     return when (payload) {
         is Payload.Literal -> payload.value
@@ -165,8 +165,8 @@ fun eval(packet: Packet): Long {
     }
 }
 
-fun part1(packet: Packet): Int =
+private fun part1(packet: Packet): Int =
     sum(packet)
 
-fun part2(packet: Packet): Long =
+private fun part2(packet: Packet): Long =
     eval(packet)

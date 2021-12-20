@@ -23,14 +23,14 @@ fun main() {
     println("Answer: $answer2")
 }
 
-data class Target(
+private data class Target(
     val x1: Int,
     val x2: Int,
     val y1: Int,
     val y2: Int,
 )
 
-fun parse(path: String): Target {
+private fun parse(path: String): Target {
     val regex = """target area: x=(-?\d+)\.\.(-?\d+), y=(-?\d+)\.\.(-?\d+)""".toRegex()
 
     val contents = File(path).readText()
@@ -43,10 +43,10 @@ fun parse(path: String): Target {
 // will work for any input that adheres to the description. But it worked for
 // me, and I don't feel interested in making this any more flexible ¯\_(ツ)_/¯
 
-fun part1(target: Target): Int =
+private fun part1(target: Target): Int =
     (abs(target.y1) - 1).let { n -> n * (n + 1) / 2 }
 
-fun Target.isReachedBy(vx: Int, vy: Int): Boolean {
+private fun Target.isReachedBy(vx: Int, vy: Int): Boolean {
     var (x, y) = 0 to 0
     var (dx, dy) = vx to vy
 
@@ -65,7 +65,7 @@ fun Target.isReachedBy(vx: Int, vy: Int): Boolean {
     return false
 }
 
-fun part2(target: Target): Int {
+private fun part2(target: Target): Int {
     val (vx0, vx1) = 1 to target.x2
     val (vy0, vy1) = target.y1 to part1(target)
 

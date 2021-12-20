@@ -21,14 +21,14 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): List<Int> =
+private fun parse(path: String): List<Int> =
     File(path)
         .readText()
         .trim()
         .split(",")
         .map(String::toInt)
 
-fun simulate(pool: List<Int>, iterations: Int): Long {
+private fun simulate(pool: List<Int>, iterations: Int): Long {
     val queue = Array(9) { 0L }
     for (fish in pool) {
         ++queue[fish]
@@ -39,8 +39,8 @@ fun simulate(pool: List<Int>, iterations: Int): Long {
     return queue.sum()
 }
 
-fun part1(pool: List<Int>) =
+private fun part1(pool: List<Int>) =
     simulate(pool, 80)
 
-fun part2(pool: List<Int>) =
+private fun part2(pool: List<Int>) =
     simulate(pool, 256)

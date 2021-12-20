@@ -21,10 +21,10 @@ fun main() {
     println("Answer: $answer2")
 }
 
-typealias Template = String
-typealias Rules = Map<String, Char>
+private typealias Template = String
+private typealias Rules = Map<String, Char>
 
-fun parse(path: String): Pair<Template, Rules> {
+private fun parse(path: String): Pair<Template, Rules> {
     val (template, rulesPart) = File(path)
         .readText()
         .trim()
@@ -37,11 +37,11 @@ fun parse(path: String): Pair<Template, Rules> {
     return template to rules
 }
 
-fun String.toRule() =
+private fun String.toRule() =
     this.split(" -> ")
         .let { (match, element) -> match to element.first() }
 
-fun expand(template: Template, rules: Rules, iterations: Int): Long {
+private fun expand(template: Template, rules: Rules, iterations: Int): Long {
     val frequencies = template
         .groupingBy { it }
         .eachCount()
@@ -74,8 +74,8 @@ fun expand(template: Template, rules: Rules, iterations: Int): Long {
     return max - min
 }
 
-fun part1(template: Template, rules: Rules) =
+private fun part1(template: Template, rules: Rules) =
     expand(template, rules, iterations = 10)
 
-fun part2(template: Template, rules: Rules) =
+private fun part2(template: Template, rules: Rules) =
     expand(template, rules, iterations = 40)

@@ -21,10 +21,10 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): List<String> =
+private fun parse(path: String): List<String> =
     File(path).readLines()
 
-fun part1(lines: List<String>): Int {
+private fun part1(lines: List<String>): Int {
     val bitCount = lines[0].length
     val gamma = (0 until bitCount)
         .map { index -> lines.count { line -> line[index] == '1' } }
@@ -35,7 +35,7 @@ fun part1(lines: List<String>): Int {
     return gamma * epsilon
 }
 
-fun part2(lines: List<String>): Int {
+private fun part2(lines: List<String>): Int {
     val calculateRating = { criteria: Char, complement: Char ->
         var index = 0
         val values = lines.toMutableList()

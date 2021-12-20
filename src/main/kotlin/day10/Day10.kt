@@ -21,10 +21,10 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String) =
+private fun parse(path: String) =
     File(path).readLines()
 
-fun part1(lines: List<String>): Long {
+private fun part1(lines: List<String>): Long {
     var sum = 0L
     for (line in lines) {
         val stack = ArrayDeque<Char>()
@@ -49,7 +49,7 @@ fun part1(lines: List<String>): Long {
     return sum
 }
 
-fun part2(lines: List<String>): Long {
+private fun part2(lines: List<String>): Long {
     val scores = mutableListOf<Long>()
 
     outer@

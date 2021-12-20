@@ -21,7 +21,7 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): Enhance {
+private fun parse(path: String): Enhance {
     val (algorithm, bits) = File(path)
         .readText()
         .trim()
@@ -30,41 +30,41 @@ fun parse(path: String): Enhance {
     return Enhance(bits.toImage(), algorithm)
 }
 
-fun String.toImage(): Image =
+private fun String.toImage(): Image =
     this.lines()
         .let { lines -> lines.joinToString(separator = "") to lines.size }
         .let { (bitmap, size) -> Image(bitmap, size) }
 
-data class Enhance(
+private data class Enhance(
     val image: Image,
     val algorithm: String,
 )
 
-data class Image(
+private data class Image(
     val bitmap: String,
     val size: Int,
     val fill: Char = '.',
 )
 
-fun <T> Iterable<T>.cross(other: Iterable<T>): List<Pair<T, T>> =
+private fun <T> Iterable<T>.cross(other: Iterable<T>): List<Pair<T, T>> =
     this.flatMap { a -> other.map { b -> a to b } }
 
-operator fun Image.get(x: Int, y: Int): Char =
+private operator fun Image.get(x: Int, y: Int): Char =
     if (x in 0 until size && y in 0 until size) {
         bitmap[y * size + x]
     } else {
         fill
     }
 
-fun Image.adjacent(x: Int, y: Int): List<Char> =
+private fun Image.adjacent(x: Int, y: Int): List<Char> =
     (-1..1).cross(-1..1)
         .map { (dy, dx) -> this[x + dx, y + dy] }
 
-fun Image.indexAt(x: Int, y: Int): Int =
+private fun Image.indexAt(x: Int, y: Int): Int =
     this.adjacent(x, y)
         .fold(0) { acc, c -> acc shl 1 or if (c == '#') 1 else 0 }
 
-fun Enhance.step(): Enhance {
+private fun Enhance.step(): Enhance {
     // After each iteration, the image expands one unit in each direction,
     // increasing the length of its sides by 2 in total.
     val size = image.size + 2
@@ -83,16 +83,16 @@ fun Enhance.step(): Enhance {
     return this.copy(image = Image(bitmap, size, fill))
 }
 
-fun Enhance.perform(iterations: Int): Image =
+private fun Enhance.perform(iterations: Int): Image =
     generateSequence(this) { p -> p.step() }
         .elementAt(iterations).image
 
-fun Enhance.countAfter(iterations: Int): Int =
+private fun Enhance.countAfter(iterations: Int): Int =
     perform(iterations)
         .bitmap.count { pixel -> pixel == '#' }
 
-fun part1(enhance: Enhance): Int =
+private fun part1(enhance: Enhance): Int =
     enhance.countAfter(iterations = 2)
 
-fun part2(enhance: Enhance): Int =
+private fun part2(enhance: Enhance): Int =
     enhance.countAfter(iterations = 50)

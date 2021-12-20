@@ -23,24 +23,24 @@ fun main() {
     println("Answer: $answer2")
 }
 
-data class Point(
+private data class Point(
     val x: Int,
     val y: Int,
 )
 
-data class Line(
+private data class Line(
     val x1: Int,
     val y1: Int,
     val x2: Int,
     val y2: Int,
 )
 
-fun parse(path: String): List<Line> =
+private fun parse(path: String): List<Line> =
     File(path)
         .readLines()
         .map(String::toLine)
 
-fun String.toLine(): Line {
+private fun String.toLine(): Line {
     val regex = """(\d+),(\d+) -> (\d+),(\d+)""".toRegex()
     val (x1, y1, x2, y2) = regex.find(this)!!
         .destructured
@@ -50,7 +50,7 @@ fun String.toLine(): Line {
     return Line(x1, y1, x2, y2)
 }
 
-fun part1(lines: List<Line>) =
+private fun part1(lines: List<Line>) =
     lines.asSequence()
         .flatMap { (x1, y1, x2, y2) ->
             if (y1 == y2) {
@@ -65,7 +65,7 @@ fun part1(lines: List<Line>) =
         .eachCount()
         .count { (_, frequency) -> frequency >= 2 }
 
-fun part2(lines: List<Line>) =
+private fun part2(lines: List<Line>) =
     lines.asSequence()
         .flatMap { (x1, y1, x2, y2) ->
             if (y1 == y2) {

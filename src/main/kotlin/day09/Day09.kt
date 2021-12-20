@@ -21,7 +21,7 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): Triple<Int, Int, List<Int>> {
+private fun parse(path: String): Triple<Int, Int, List<Int>> {
     val lines = File(path).readLines()
 
     val width = lines.first().length
@@ -34,26 +34,26 @@ fun parse(path: String): Triple<Int, Int, List<Int>> {
     return Triple(width, height, locations)
 }
 
-fun Triple<Int, Int, List<Int>>.toHeightmap() =
+private fun Triple<Int, Int, List<Int>>.toHeightmap() =
     let { (width, height, locations) ->
         Heightmap(width, height, locations.map(::Location))
     }
 
-data class Heightmap(
+private data class Heightmap(
     val width: Int,
     val height: Int,
     val locations: List<Location>,
 )
 
-data class Location(
+private data class Location(
     val height: Int,
     var visited: Boolean = false,
 )
 
-operator fun Heightmap.get(x: Int, y: Int) =
+private operator fun Heightmap.get(x: Int, y: Int) =
     locations[y * width + x]
 
-fun adjacentNodes(x: Int, y: Int, width: Int, height: Int) =
+private fun adjacentNodes(x: Int, y: Int, width: Int, height: Int) =
     listOfNotNull(
         if (x - 1 >= 0)     x - 1 to y else null,
         if (x + 1 < width)  x + 1 to y else null,
@@ -61,7 +61,7 @@ fun adjacentNodes(x: Int, y: Int, width: Int, height: Int) =
         if (y + 1 < height) x to y + 1 else null,
     )
 
-fun part1(heightmap: Heightmap): Int {
+private fun part1(heightmap: Heightmap): Int {
     var sum = 0
     val (width, height) = heightmap
     for (y in 0 until height) {
@@ -78,14 +78,14 @@ fun part1(heightmap: Heightmap): Int {
     return sum
 }
 
-fun Location.isInsideUnexploredBasin() =
+private fun Location.isInsideUnexploredBasin() =
     !visited && height != 9
 
-fun Location.visit() {
+private fun Location.visit() {
     visited = true
 }
 
-fun countNodesInBasin(heightmap: Heightmap, x: Int, y: Int): Int {
+private fun countNodesInBasin(heightmap: Heightmap, x: Int, y: Int): Int {
     val nodesToVisit = ArrayDeque(listOf(x to y))
 
     var count = 0
@@ -105,7 +105,7 @@ fun countNodesInBasin(heightmap: Heightmap, x: Int, y: Int): Int {
     return count
 }
 
-fun part2(heightmap: Heightmap): Int {
+private fun part2(heightmap: Heightmap): Int {
     val basins = mutableListOf<Int>()
 
     val (width, height) = heightmap

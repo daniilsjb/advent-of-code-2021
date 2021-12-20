@@ -21,12 +21,12 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): List<Int> =
+private fun parse(path: String): List<Int> =
     File(path)
         .readLines()
         .flatMap { it.map(Char::digitToInt) }
 
-fun adjacentNodes(x: Int, y: Int): List<Pair<Int, Int>> =
+private fun adjacentNodes(x: Int, y: Int): List<Pair<Int, Int>> =
     listOfNotNull(
         if (x - 1 >= 0 && y - 1 >= 0) x - 1 to y - 1 else null,
         if (              y - 1 >= 0) x     to y - 1 else null,
@@ -38,7 +38,7 @@ fun adjacentNodes(x: Int, y: Int): List<Pair<Int, Int>> =
         if (x + 1 < 10 && y + 1 < 10) x + 1 to y + 1 else null,
     )
 
-fun step(energy: MutableList<Int>): Int {
+private fun step(energy: MutableList<Int>): Int {
     var flashCount = 0
 
     val flashQueue = ArrayDeque<Pair<Int, Int>>(100)
@@ -67,9 +67,10 @@ fun step(energy: MutableList<Int>): Int {
     return flashCount
 }
 
-fun part1(energy: MutableList<Int>) =
-    (0 until 100).sumOf { step(energy) }
+private fun part1(energy: MutableList<Int>) =
+    (0 until 100)
+        .sumOf { step(energy) }
 
-fun part2(energy: MutableList<Int>) =
+private fun part2(energy: MutableList<Int>) =
     generateSequence(1) { it + 1 }
         .first { step(energy) == 100 }

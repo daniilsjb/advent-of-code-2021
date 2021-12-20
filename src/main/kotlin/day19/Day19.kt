@@ -32,26 +32,26 @@ fun main() {
  * Point
  */
 
-data class Point(
+private data class Point(
     val x: Int,
     val y: Int,
     val z: Int,
 )
 
-operator fun Point.plus(other: Point): Point =
+private operator fun Point.plus(other: Point): Point =
     Point(x + other.x, y + other.y, z + other.z)
 
-operator fun Point.minus(other: Point): Point =
+private operator fun Point.minus(other: Point): Point =
     Point(x - other.x, y - other.y, z - other.z)
 
-fun distance(p1: Point, p2: Point): Int =
+private fun distance(p1: Point, p2: Point): Int =
     abs(p2.x - p1.x) + abs(p2.y - p1.y) + abs(p2.z - p1.z)
 
 /*
  * Rotations
  */
 
-val Rotations = listOf<(Point) -> Point>(
+private val Rotations = listOf<(Point) -> Point>(
     // 90° rotations around +x
     { (x, y, z) -> Point(+x, +y, +z) },
     { (x, y, z) -> Point(+x, -z, +y) },
@@ -89,14 +89,14 @@ val Rotations = listOf<(Point) -> Point>(
     { (x, y, z) -> Point(-z, -y, -x) },
 )
 
-fun Set<Point>.getOrientations(): List<List<Point>> =
+private fun Set<Point>.getOrientations(): List<List<Point>> =
     Rotations.map { rotate -> this.map(rotate) }
 
 /*
  * Scanner
  */
 
-data class Scanner(val beacons: Set<Point>) {
+private data class Scanner(val beacons: Set<Point>) {
     // All orientations are pre-computed because they never change. This way we
     // avoid rotating points each time a scanner is tried for overlaps.
     val orientations = beacons.getOrientations()
@@ -128,12 +128,12 @@ data class Scanner(val beacons: Set<Point>) {
  * continues until no scanners are left untranslated.
  */
 
-data class TranslatedScanner(
+private data class TranslatedScanner(
     val position: Point,
     val beacons: Set<Point>,
 )
 
-tailrec fun translateAll(scanners: List<Scanner>, pivots: List<TranslatedScanner>): List<TranslatedScanner> {
+private tailrec fun translateAll(scanners: List<Scanner>, pivots: List<TranslatedScanner>): List<TranslatedScanner> {
     if (scanners.isEmpty()) {
         return pivots
     }
@@ -151,11 +151,11 @@ tailrec fun translateAll(scanners: List<Scanner>, pivots: List<TranslatedScanner
     return translateAll(newScanners, newPivots)
 }
 
-fun translate(scanner: Scanner, pivots: List<TranslatedScanner>): TranslatedScanner? {
+private fun translate(scanner: Scanner, pivots: List<TranslatedScanner>): TranslatedScanner? {
     return pivots.firstNotNullOfOrNull { pivot -> findOverlap(scanner, pivot) }
 }
 
-fun findOverlap(scanner: Scanner, pivot: TranslatedScanner): TranslatedScanner? {
+private fun findOverlap(scanner: Scanner, pivot: TranslatedScanner): TranslatedScanner? {
     for (orientation in scanner.orientations) {
         for (translated in pivot.beacons) {
             for (beacon in orientation) {
@@ -175,7 +175,7 @@ fun findOverlap(scanner: Scanner, pivot: TranslatedScanner): TranslatedScanner? 
  * Parsing
  */
 
-fun parse(path: String): List<Scanner> {
+private fun parse(path: String): List<Scanner> {
     val blocks = File(path)
         .readText()
         .trim()
@@ -186,12 +186,12 @@ fun parse(path: String): List<Scanner> {
         .map(::Scanner)
 }
 
-fun String.toBeacons(): Set<Point> =
+private fun String.toBeacons(): Set<Point> =
     this.lines()
         .drop(1)
         .mapTo(HashSet(), String::toPoint)
 
-fun String.toPoint(): Point =
+private fun String.toPoint(): Point =
     this.split(",")
         .map(String::toInt)
         .let { (x, y, z) -> Point(x, y, z) }
@@ -200,12 +200,12 @@ fun String.toPoint(): Point =
  * Solutions
  */
 
-fun part1(scanners: List<TranslatedScanner>): Int =
+private fun part1(scanners: List<TranslatedScanner>): Int =
     scanners
         .flatMapTo(HashSet()) { it.beacons}
         .count()
 
-fun part2(scanners: List<TranslatedScanner>): Int =
+private fun part2(scanners: List<TranslatedScanner>): Int =
     scanners.maxOf { a ->
         scanners.maxOf { b ->
             distance(a.position, b.position)

@@ -21,7 +21,7 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): Pair<List<Int>, List<List<Int>>> {
+private fun parse(path: String): Pair<List<Int>, List<List<Int>>> {
     val entries = File(path)
         .readText()
         .trim()
@@ -40,11 +40,11 @@ fun parse(path: String): Pair<List<Int>, List<List<Int>>> {
 
 // We need to keep track of each board's state as the game progresses.
 // The simplest and most effective approach would be to mutate the board itself.
-typealias Board = MutableList<Int>
+private typealias Board = MutableList<Int>
 
 // Boards have a sense of dimensionality, but all numbers are stored as flat lists.
 // This structure allows us to fully describe a given number's position.
-data class Position(
+private data class Position(
     val col: Int,
     val row: Int,
     val idx: Int,
@@ -52,7 +52,7 @@ data class Position(
 
 // It is important to remember that a number is not guaranteed to appear on every
 // board, therefore it may not always have a position.
-fun Board.findPosition(number: Int): Position? =
+private fun Board.findPosition(number: Int): Position? =
     (0 until 5).firstNotNullOfOrNull { row ->
         (0 until 5).firstNotNullOfOrNull { col ->
             val index = row * 5 + col
@@ -71,14 +71,14 @@ fun Board.findPosition(number: Int): Position? =
 // the calculations and replace it with something completely different. This may
 // not be the cleanest approach, but it lets us reuse space efficiently, avoid
 // introducing extra data classes, etc.
-fun Board.mark(idx: Int) {
+private fun Board.mark(idx: Int) {
     this[idx] = -1
 }
 
 // Naturally, the board may be put into a winning position only after a number
 // was marked, and the number can only affect one row and one column. It's enough
 // to just check these two, without bothering the rest of the board.
-fun Board.hasWon(col: Int, row: Int) =
+private fun Board.hasWon(col: Int, row: Int) =
     (0 until 5).all { i -> this[row * 5 + i] < 0 } ||
     (0 until 5).all { i -> this[i * 5 + col] < 0 }
 
@@ -86,7 +86,7 @@ fun Board.hasWon(col: Int, row: Int) =
 // we mark each number, in turn, on each board, until we encounter a winning
 // position, in which case the result is directly returned.
 
-fun part1(numbers: List<Int>, boards: List<Board>) =
+private fun part1(numbers: List<Int>, boards: List<Board>) =
     numbers.firstNotNullOf { number ->
         boards.firstNotNullOfOrNull { board ->
             board.findPosition(number)?.let { (col, row, idx) ->
@@ -104,13 +104,13 @@ fun part1(numbers: List<Int>, boards: List<Board>) =
 // at some point); we then find the victory that happened on the latest turn
 // and use it to calculate the final result.
 
-data class Victory(
+private data class Victory(
     val turn: Int,
     val number: Int,
     val board: Board
 )
 
-fun part2(numbers: List<Int>, boards: List<Board>) =
+private fun part2(numbers: List<Int>, boards: List<Board>) =
     boards.map { board ->
         numbers.indexOfFirst { number ->
             board.findPosition(number)?.let { (col, row, idx) ->

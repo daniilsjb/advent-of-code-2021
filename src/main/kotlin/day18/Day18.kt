@@ -26,7 +26,7 @@ fun main() {
  * AST
  */
 
-sealed interface Element {
+private sealed interface Element {
     @JvmInline
     value class Number(val value: Int) : Element {
         override fun toString() = value.toString()
@@ -41,25 +41,25 @@ sealed interface Element {
  * Parsing
  */
 
-fun parse(path: String): List<Element> =
+private fun parse(path: String): List<Element> =
     File(path)
         .readLines()
         .map(String::toElement)
 
-fun String.toElement(): Element =
+private fun String.toElement(): Element =
     ParserState(source = this).element()
 
-data class ParserState(
+private data class ParserState(
     val source: String,
     var current: Int = 0,
 )
 
 /* Parsing Primitives */
 
-fun ParserState.peek(): Char =
+private fun ParserState.peek(): Char =
     source[current]
 
-fun ParserState.next(): Char =
+private fun ParserState.next(): Char =
     source[current++]
 
 /* Syntax Rules */
@@ -67,7 +67,7 @@ fun ParserState.next(): Char =
 /*
  * element ::= pair | number
  */
-fun ParserState.element(): Element {
+private fun ParserState.element(): Element {
     return if (peek() == '[') {
         pair()
     } else {
@@ -78,7 +78,7 @@ fun ParserState.element(): Element {
 /*
  * pair ::= '[' element ',' element ']'
  */
-fun ParserState.pair(): Element {
+private fun ParserState.pair(): Element {
     next() // skip [
     val lhs = element()
     next() // skip ,
@@ -90,7 +90,7 @@ fun ParserState.pair(): Element {
 /*
  * number ::= [0-9]+
  */
-fun ParserState.number(): Element {
+private fun ParserState.number(): Element {
     var result = 0
     while (peek().isDigit()) {
         result = result * 10 + next().digitToInt()
@@ -106,7 +106,7 @@ fun ParserState.number(): Element {
  * Every reduction attempt may either succeed and yield a new simplified tree,
  * or fail in case the tree could not be simplified any further.
  */
-sealed interface Reduction {
+private sealed interface Reduction {
     @JvmInline
     value class Success(val value: Element) : Reduction
 
@@ -118,7 +118,7 @@ sealed interface Reduction {
  * there is nothing more to reduce. At the point when no further reduction
  * may happen, this function returns the original element.
  */
-tailrec fun reduce(element: Element): Element =
+private tailrec fun reduce(element: Element): Element =
     when (val result = step(element)) {
         is Reduction.Success -> reduce(result.value)
         is Reduction.Failure -> element
@@ -129,7 +129,7 @@ tailrec fun reduce(element: Element): Element =
  * exploding has higher priority than splitting, so each action is tried
  * in order until one of them succeeds.
  */
-fun step(element: Element): Reduction {
+private fun step(element: Element): Reduction {
     val actions = arrayOf(::explode, ::split)
     for (action in actions) {
         val result = action(element)
@@ -149,7 +149,7 @@ fun step(element: Element): Reduction {
  * Attempts to reduce the tree by exploding its leftmost pair nested four
  * levels deep. If no such pair exists, returns a failure.
  */
-fun explode(element: Element): Reduction =
+private fun explode(element: Element): Reduction =
     explodeAt(element, depth = 0).let { explosion ->
         when (explosion) {
             is Explosion.Success -> Reduction.Success(explosion.result)
@@ -172,10 +172,10 @@ fun explode(element: Element): Reduction =
  * propagate up the call stack, and it is then the callers' responsibility to
  * "finish" the work. This type is used to encode an explosion in-progress.
  */
-sealed interface Explosion {
+private sealed interface Explosion {
     data class Success(
         val result: Element,
-        val delta: Delta,
+        val delta: Delta
     ) : Explosion
 
     object Failure : Explosion
@@ -188,7 +188,7 @@ sealed interface Explosion {
  * that either side of the delta has already been handled, which is why they
  * are nullable.
  */
-data class Delta(
+private data class Delta(
     val lhs: Int?,
     val rhs: Int?,
 )
@@ -196,13 +196,13 @@ data class Delta(
 /*
  * Attempts to explode an element at some depth.
  */
-fun explodeAt(element: Element, depth: Int): Explosion =
+private fun explodeAt(element: Element, depth: Int): Explosion =
     when (element) {
         is Element.Pair -> explodeAt(element, depth)
         is Element.Number -> explodeAt(element, depth)
     }
 
-fun explodeAt(element: Element.Pair, depth: Int): Explosion {
+private fun explodeAt(element: Element.Pair, depth: Int): Explosion {
     if (depth == 4) {
         return Explosion.Success(Element.Number(0), element.toDelta())
     }
@@ -243,22 +243,22 @@ fun explodeAt(element: Element.Pair, depth: Int): Explosion {
 /*
  * A number may never explode, therefore this is a no-op that always fails.
  */
-fun explodeAt(element: Element.Number, depth: Int): Explosion =
+private fun explodeAt(element: Element.Number, depth: Int): Explosion =
     Explosion.Failure
 
-fun Element.Pair.toDelta(): Delta {
+private fun Element.Pair.toDelta(): Delta {
     val lhs = (lhs as Element.Number).value
     val rhs = (rhs as Element.Number).value
     return Delta(lhs, rhs)
 }
 
-fun Element.addToLeftmost(delta: Int): Element =
+private fun Element.addToLeftmost(delta: Int): Element =
     when (this) {
         is Element.Number -> Element.Number(value + delta)
         is Element.Pair -> copy(lhs = lhs.addToLeftmost(delta))
     }
 
-fun Element.addToRightmost(delta: Int): Element =
+private fun Element.addToRightmost(delta: Int): Element =
     when (this) {
         is Element.Number -> Element.Number(value + delta)
         is Element.Pair -> copy(rhs = rhs.addToRightmost(delta))
@@ -272,7 +272,7 @@ fun Element.addToRightmost(delta: Int): Element =
  * Attempts to reduce the tree by splitting its leftmost number that is greater
  * than 9. If no such number exists, returns a failure.
  */
-fun split(element: Element): Reduction =
+private fun split(element: Element): Reduction =
     when (element) {
         is Element.Pair -> split(element)
         is Element.Number -> split(element)
@@ -282,7 +282,7 @@ fun split(element: Element): Reduction =
  * Attempts to split each branch of a pair, starting with the leftmost and
  * terminating on first success.
  */
-fun split(element: Element.Pair): Reduction {
+private fun split(element: Element.Pair): Reduction {
     split(element.lhs).let { result ->
         if (result is Reduction.Success) {
             return@split Reduction.Success(element.copy(lhs = result.value))
@@ -301,7 +301,7 @@ fun split(element: Element.Pair): Reduction {
 /*
  * Attempts to split a number if it meets the reduction criterion.
  */
-fun split(element: Element.Number): Reduction =
+private fun split(element: Element.Number): Reduction =
     if (element.value > 9) {
         val lhs = Element.Number((element.value + 0) / 2)
         val rhs = Element.Number((element.value + 1) / 2)
@@ -314,21 +314,21 @@ fun split(element: Element.Number): Reduction =
  * Evaluation
  */
 
-operator fun Element.plus(other: Element): Element =
+private operator fun Element.plus(other: Element): Element =
     Element.Pair(this, other).run(::reduce)
 
-fun magnitude(element: Element): Int =
+private fun magnitude(element: Element): Int =
     when (element) {
         is Element.Pair -> magnitude(element.lhs) * 3 + magnitude(element.rhs) * 2
         is Element.Number -> element.value
     }
 
-fun part1(elements: List<Element>) =
+private fun part1(elements: List<Element>) =
     elements
         .reduce(Element::plus)
         .run(::magnitude)
 
-fun part2(elements: List<Element>): Int {
+private fun part2(elements: List<Element>): Int {
     var max = 0
     for ((i, x) in elements.withIndex()) {
         for ((j, y) in elements.withIndex()) {

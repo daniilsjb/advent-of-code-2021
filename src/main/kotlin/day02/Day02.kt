@@ -21,21 +21,21 @@ fun main() {
     println("Answer: $answer2")
 }
 
-enum class Action {
+private enum class Action {
     Up, Down, Forward,
 }
 
-data class Command(
+private data class Command(
     val action: Action,
     val number: Int,
 )
 
-fun parse(path: String): List<Command> =
+private fun parse(path: String): List<Command> =
     File(path)
         .readLines()
         .map(String::toCommand)
 
-fun String.toCommand(): Command {
+private fun String.toCommand(): Command {
     val (actionPart, numberPart) = this.split(" ")
     val action = when (actionPart) {
         "up" -> Action.Up
@@ -47,7 +47,7 @@ fun String.toCommand(): Command {
     return Command(action, number)
 }
 
-fun part1(commands: List<Command>): Int {
+private fun part1(commands: List<Command>): Int {
     var (horizontal, depth) = arrayOf(0, 0)
     for ((action, number) in commands) {
         when (action) {
@@ -59,7 +59,7 @@ fun part1(commands: List<Command>): Int {
     return horizontal * depth
 }
 
-fun part2(commands: List<Command>): Int {
+private fun part2(commands: List<Command>): Int {
     var (horizontal, depth, aim) = arrayOf(0, 0, 0)
     for ((action, number) in commands) {
         when (action) {

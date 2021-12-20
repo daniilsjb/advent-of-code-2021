@@ -22,26 +22,26 @@ fun main() {
     println("Answer:\n$answer2")
 }
 
-enum class Axis {
+private enum class Axis {
     X, Y
 }
 
-data class Point(
+private data class Point(
     val x: Int,
     val y: Int,
 )
 
-data class Fold(
+private data class Fold(
     val axis: Axis,
     val line: Int,
 )
 
-data class Instructions(
+private data class Instructions(
     val points: Set<Point>,
     val folds: List<Fold>,
 )
 
-fun parse(path: String): Instructions {
+private fun parse(path: String): Instructions {
     val (pointsPart, foldsPart) = File(path)
         .readText()
         .split("""(\n\n)|(\r\n\r\n)""".toRegex())
@@ -58,36 +58,36 @@ fun parse(path: String): Instructions {
     return Instructions(points, folds)
 }
 
-fun String.toPoint(): Point =
+private fun String.toPoint(): Point =
     this.split(",")
         .let { (lhs, rhs) -> Point(lhs.toInt(), rhs.toInt()) }
 
-fun String.toFold(): Fold =
+private fun String.toFold(): Fold =
     this.removePrefix("fold along ")
         .split("=")
         .let { (lhs, rhs) -> Fold(lhs.toAxis(), rhs.toInt()) }
 
-fun String.toAxis(): Axis =
+private fun String.toAxis(): Axis =
     when (this) {
         "x" -> Axis.X
         "y" -> Axis.Y
         else -> error("Invalid folding axis")
     }
 
-fun Point.reflect(axis: Axis, line: Int): Point =
+private fun Point.reflect(axis: Axis, line: Int): Point =
     when (axis) {
         Axis.X -> Point(line - abs(x - line), y)
         Axis.Y -> Point(x, line - abs(y - line))
     }
 
-fun part1(points: Set<Point>, folds: List<Fold>): Int {
+private fun part1(points: Set<Point>, folds: List<Fold>): Int {
     val (axis, line) = folds.first()
     return points
         .mapTo(HashSet()) { it.reflect(axis, line) }
         .count()
 }
 
-fun part2(points: Set<Point>, folds: List<Fold>): String {
+private fun part2(points: Set<Point>, folds: List<Fold>): String {
     val code = folds.fold(points) { dots, (axis, line) ->
         dots.mapTo(HashSet())  { it.reflect(axis, line) }
     }

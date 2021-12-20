@@ -21,15 +21,15 @@ fun main() {
     println("Answer: $answer2")
 }
 
-typealias Segments = Set<Char>
-typealias Entry = Pair<List<Segments>, List<Segments>>
+private typealias Segments = Set<Char>
+private typealias Entry = Pair<List<Segments>, List<Segments>>
 
-fun parse(path: String): List<Entry> =
+private fun parse(path: String): List<Entry> =
     File(path)
         .readLines()
         .map(String::toEntry)
 
-fun String.toEntry(): Entry =
+private fun String.toEntry(): Entry =
     this.split("|")
         .map { part -> part
             .trim()
@@ -38,12 +38,12 @@ fun String.toEntry(): Entry =
         }
         .let { (patterns, digits) -> Entry(patterns, digits) }
 
-fun part1(entries: List<Entry>) =
+private fun part1(entries: List<Entry>) =
     entries.sumOf { (_, digits) ->
         digits.count { digit -> digit.size in arrayOf(2, 3, 4, 7) }
     }
 
-fun part2(entries: List<Entry>) =
+private fun part2(entries: List<Entry>) =
     entries.sumOf { (patterns, digits) ->
         // The approach of this solution is to directly determine which
         // combinations of letters map to which digits.

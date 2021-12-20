@@ -21,10 +21,10 @@ fun main() {
     println("Answer: $answer2")
 }
 
-typealias Label = String
-typealias Graph = Map<Label, List<Label>>
+private typealias Label = String
+private typealias Graph = Map<Label, List<Label>>
 
-fun parse(path: String): Graph {
+private fun parse(path: String): Graph {
     val graph = mutableMapOf<Label, List<Label>>()
 
     for (line in File(path).readLines()) {
@@ -38,7 +38,12 @@ fun parse(path: String): Graph {
 
 // Depth-first count of all possible paths from a node to the end of the graph.
 // When bias is set to true, a single small cave is allowed to be visited twice.
-fun countPaths(graph: Graph, current: Label, visited: List<Label> = listOf(current), bias: Boolean = false): Int =
+private fun countPaths(
+    graph: Graph,
+    current: Label,
+    visited: List<Label> = listOf(current),
+    bias: Boolean = false
+): Int =
     graph.getValue(current).sumOf { neighbour ->
         if (neighbour == "end") {
             1

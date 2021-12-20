@@ -21,17 +21,17 @@ fun main() {
     println("Answer: $answer2")
 }
 
-fun parse(path: String): List<Int> =
+private fun parse(path: String): List<Int> =
     File(path)
         .readLines()
         .map(String::toInt)
 
-fun part1(numbers: List<Int>) =
+private fun part1(numbers: List<Int>) =
     numbers
         .zipWithNext { previous, next -> if (next > previous) 1 else 0 }
         .sum()
 
-fun part2(numbers: List<Int>) =
+private fun part2(numbers: List<Int>) =
     numbers.windowed(size = 3, transform = List<Int>::sum)
         .zipWithNext { previous, next -> if (next > previous) 1 else 0 }
         .sum()

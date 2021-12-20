@@ -22,17 +22,17 @@ fun main() {
     println("Answer: $answer2")
 }
 
-data class Graph(
+private data class Graph(
     val size: Int,
     val vertices: List<Int>,
 )
 
-data class Vertex(
+private data class Vertex(
     val x: Int,
     val y: Int,
 )
 
-data class Path(
+private data class Path(
     val target: Vertex,
     val distance: Int,
 ) : Comparable<Path> {
@@ -41,7 +41,7 @@ data class Path(
         distance.compareTo(other.distance)
 }
 
-fun parse(path: String): Graph {
+private fun parse(path: String): Graph {
     val lines = File(path).readLines()
 
     val size = lines.size
@@ -52,7 +52,7 @@ fun parse(path: String): Graph {
     return Graph(size, nodes)
 }
 
-fun Graph.distanceAt(vertex: Vertex): Int {
+private fun Graph.distanceAt(vertex: Vertex): Int {
     val dx = vertex.x / size
     val dy = vertex.y / size
 
@@ -63,7 +63,7 @@ fun Graph.distanceAt(vertex: Vertex): Int {
     return (combinedCost - 1) % 9 + 1
 }
 
-fun Vertex.edges(target: Vertex): List<Vertex> =
+private fun Vertex.edges(target: Vertex): List<Vertex> =
     listOfNotNull(
         if (x - 1 > 0)         Vertex(x - 1, y) else null,
         if (x + 1 <= target.x) Vertex(x + 1, y) else null,
@@ -71,7 +71,7 @@ fun Vertex.edges(target: Vertex): List<Vertex> =
         if (y + 1 <= target.y) Vertex(x, y + 1) else null,
     )
 
-fun findPath(graph: Graph, target: Vertex): Int {
+private fun findPath(graph: Graph, target: Vertex): Int {
     val source = Vertex(0, 0)
 
     val distances = mutableMapOf(source to 0)
@@ -97,8 +97,8 @@ fun findPath(graph: Graph, target: Vertex): Int {
     error("Could not find the shortest path.")
 }
 
-fun part1(graph: Graph): Int =
+private fun part1(graph: Graph): Int =
     findPath(graph, target = Vertex(graph.size - 1, graph.size - 1))
 
-fun part2(graph: Graph): Int =
+private fun part2(graph: Graph): Int =
     findPath(graph, target = Vertex(graph.size * 5 - 1, graph.size * 5 - 1))
