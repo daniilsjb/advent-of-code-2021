@@ -98,9 +98,7 @@ private fun part1(state: GameState): Long {
  * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
  *   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |   |
  *   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v   v
- * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
- * | 3 | 4 | 5 | 4 | 5 | 6 | 5 | 6 | 7 | 4 | 5 | 6 | 5 | 6 | 7 | 6 | 7 | 8 | 5 | 6 | 7 | 6 | 7 | 8 | 7 | 8 | 9 |
- * +---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+---+
+ *   3   4   5   4   5   6   5   6   7   4   5   6   5   6   7   6   7   8   5   6   7   6   7   8   7   8   9
  *
  * Notice that all values are in range [3-9]. What's even more important is that these values repeat! For example,
  * the roll 6 appears 7 times in total. This means that there are 7 parallel universes where, at this very turn, the
