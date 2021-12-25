@@ -55,7 +55,7 @@ fun main() {
  * 3) Now we can analyze the constants to gain some additional insight. It
  * turns out that 'a' can ever only be 1 or 26, abs(b) is always below 26, and
  * 'c' is always below 26. The number 26 seems to play the role of a base;
- * register 'z' may be seen as a base-26 number with those operations:
+ * register z may be seen as a base-26 number with those operations:
  *
  *     z := z * 26 + (w + c)    ; append a base-26 digit to the end
  *     z := z / 26              ; remove the last base-26 digit
@@ -79,13 +79,13 @@ fun main() {
  *         z := (z / 26) * 26 + w + c   ; replace last digit of z with (w + c)
  *
  * 4) The key insight here is that we can push to z when 'a' is 1 and pop from
- * 'z' when 'a' is 26. It turns out that each of those values appear exactly 7
+ * z when 'a' is 26. It turns out that each of those values appear exactly 7
  * times, meaning there are as many pushes as there are pops. Now the problem
  * really reduces to ensuring that the pushes and pops are balanced, such that
  * we start and end with an empty stack (i.e. 'z' equalling 0).
  *
  * 5) Whenever 'a' is 1, we want to execute the second condition, and whenever
- * 'a' is 2, we want to execute the first condition. We also need to ensure
+ * 'a' is 26, we want to execute the first condition. We also need to ensure
  * that the digit we're adding and removing is the same. Therefore:
  *
  *     w1 + c1 = w2 - b2
