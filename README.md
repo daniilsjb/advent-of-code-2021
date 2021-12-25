@@ -28,6 +28,6 @@ This repository contains my solutions for [Advent of Code](https://adventofcode.
 | 20  | ✓        | ✓        | [Day20.kt](src/main/kotlin/day20/Day20.kt) |
 | 21  | ✓        | ✓        | [Day21.kt](src/main/kotlin/day21/Day21.kt) |
 | 22  | ✓        | ✓        | [Day22.kt](src/main/kotlin/day22/Day22.kt) |
-| 23  |          |          |                                            |
+| 23  | ✓        | ✓        | [Day23.kt](src/main/kotlin/day23/Day23.kt) |
 | 24  | ✓        | ✓        | [Day24.kt](src/main/kotlin/day24/Day24.kt) |
 | 25  |          |          |                                            |
