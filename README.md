@@ -29,5 +29,5 @@ This repository contains my solutions for [Advent of Code](https://adventofcode.
 | 21  | ✓        | ✓        | [Day21.kt](src/main/kotlin/day21/Day21.kt) |
 | 22  | ✓        | ✓        | [Day22.kt](src/main/kotlin/day22/Day22.kt) |
 | 23  |          |          |                                            |
-| 24  |          |          |                                            |
+| 24  | ✓        | ✓        | [Day24.kt](src/main/kotlin/day24/Day24.kt) |
 | 25  |          |          |                                            |
